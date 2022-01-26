@@ -1,5 +1,13 @@
 
 
+#' Run the MAST21 2022 protocol
+#'
+#' @param musicassessr_state
+#'
+#' @return
+#' @export
+#'
+#' @examples
 deploy_MAST21_2022 <- function(musicassessr_state = "test") {
 
   psychTestR::make_test(
