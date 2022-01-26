@@ -15,8 +15,6 @@ MAST21 <- function(state = "production",
 
     musicassessr::get_voice_range_page(with_examples = FALSE),
 
-    psychTestR::elt_save_results_to_disk(complete = FALSE),
-
 
     psychTestR::code_block(function(state, ...) {
       snap <- sample(1:2, 1)
@@ -24,8 +22,6 @@ MAST21 <- function(state = "production",
     }),
 
     musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd1"),
-
-    psychTestR::elt_save_results_to_disk(complete = FALSE),
 
 
     psychTestR::conditional(test = function(state, ...) {
@@ -35,12 +31,7 @@ MAST21 <- function(state = "production",
 
       MAST21_daah,
 
-      psychTestR::elt_save_results_to_disk(complete = FALSE),
-
-
       musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd2"),
-
-      psychTestR::elt_save_results_to_disk(complete = FALSE),
 
 
       psychTestR::one_button_page(shiny::tags$div(
@@ -61,8 +52,6 @@ MAST21 <- function(state = "production",
 
       musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd3"),
 
-      psychTestR::elt_save_results_to_disk(complete = FALSE),
-
 
       psychTestR::one_button_page("In the following trials, you will sing back melodies. Please sing with a \"Daah\" sound."),
 
@@ -74,41 +63,6 @@ MAST21 <- function(state = "production",
 
     musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd4")
   ), dict = musicassessr::dict(NULL))
-}
-
-#' A page to identify a user's singing range by asking them to sing Happy Birthday
-#'
-#' @param feedback
-#'
-#' @return
-#' @export
-#'
-#' @examples
-sing_happy_birthday_page <- function(feedback = FALSE, label = "sing_hbd") {
-
-  page <- record_audio_page(label = label,
-                            page_text = "Please sing Happy Birthday.",
-                            get_answer = get_answer_simple_pyin_summary,
-                            auto_next_page = TRUE)
-
-  if(feedback) {
-    c(
-      page,
-      psychTestR::reactive_page(function(state, answer, ...) {
-        psychTestR::one_button_page(
-          shiny::tags$div(
-            shiny::tags$h1("Output"),
-            shiny::tags$p(paste0('Min: ', answer$Min.)),
-            shiny::tags$p(paste0('Max: ', answer$Max.)),
-            shiny::tags$p(paste0('Mean: ', answer$Mean)),
-            shiny::tags$p(paste0('Median: ', answer$Median))
-          )
-        )
-      })
-    )
-  } else {
-    page
-  }
 }
 
 
@@ -147,59 +101,44 @@ UPEI_extra_questions <- function() {
                                     shiny::em("do mi sol "), "as a particular structure. What is the name of that structure?"),
                             choices = c("major", "minor", "diminished", "augmented", "not sure")),
 
-      psychTestR::elt_save_results_to_disk(complete = FALSE),
-
       psychTestR::NAFC_page(label = "music_theory_2",
                             prompt = "What triad appears once in the major scale?",
                             choices = c("major", "minor", "diminished", "augmented", "not sure")),
 
-      psychTestR::elt_save_results_to_disk(complete = FALSE),
 
       psychTestR::NAFC_page(label = "music_theory_3",
                             prompt = "What triad has two major thirds?",
                             choices = c("major", "minor", "diminished", "augmented", "not sure")),
 
-      psychTestR::elt_save_results_to_disk(complete = FALSE),
-
       psychTestR::NAFC_page(label = "music_theory_4",
                             prompt = "What triad has two minor thirds?",
                             choices = c("major", "minor", "diminished", "augmented", "not sure")),
 
-      psychTestR::elt_save_results_to_disk(complete = FALSE),
 
       psychTestR::NAFC_page(label = "music_theory_5",
                             prompt = "Which chord progression represents a typical ending of a piece of music?",
                             choices = c("I - V", "II - VI", "VI - V", "V - I", "not sure")),
 
-      psychTestR::elt_save_results_to_disk(complete = FALSE),
 
       psychTestR::NAFC_page(label = "music_theory_6",
                             prompt = "Would you like to receive the results of Session 2.",
                             choices = c("yes", "no")),
 
-      psychTestR::elt_save_results_to_disk(complete = FALSE),
-
       psychTestR::text_input_page(label = "music_theory_7",
                                   prompt = "If there is any other information you feel is important regarding your knowledge of popular music or any aspect of this questionnaire, please feel free to give a brief description below: ",
                                   one_line = FALSE),
-
-      psychTestR::elt_save_results_to_disk(complete = FALSE),
 
       psychTestR::NAFC_page(label = "prize_draw",
                             prompt = "Would you like to enter the draw (1 of 25 chances to win $50)?",
                             choices = c("yes", "no")),
 
-      psychTestR::elt_save_results_to_disk(complete = FALSE),
-
       psychTestR::NAFC_page(label = "bonus_credits",
                             prompt = "For students currently enrolled in Psychology 1010 Introductory Psychology:  Would you like to receive a bonus point toward your Psychology 1010 grade?",
                             choices = c("yes", "no")),
 
-      psychTestR::elt_save_results_to_disk(complete = FALSE),
-
       psychTestR::conditional(test = function(state, answer, ...) {
         psychTestR::answer(state) == "yes" },
-                            logic = psychTestR::NAFC_page(label = "upei_professor",,
+                            logic = psychTestR::NAFC_page(label = "upei_professor",
                                        prompt = "Please indicate which is your professor: ",
                                        choices = c("Dr. Stacey MacKinnon",
                                                    "Dr. Philip Smith",
@@ -219,27 +158,21 @@ setup_questions <- function() {
                                            prompt = "Are you running this page in the latest version of Google Chrome?",
                                            on_complete = musicassessr::have_requirements),
 
-                     psychTestR::elt_save_results_to_disk(complete = FALSE),
-
                      psychTestR::one_button_page(shiny::tags$div(shiny::tags$p("For best results please: "),
                                                                  shiny::tags$ul(
                                                                    shiny::tags$li("Close all tabs and windows other than this one."),
                                                                    shiny::tags$li("Quit other apps that are running, and pause any app or file downloads.")))),
 
-                     psychTestR::one_button_page(shiny::tags$p(style = "text-align: left;", "This group of music tests has been recently developed, and the researchers have not been able to test is out on every computer.
-          It is possible that the program will stop working on your computer.  If this happens you may see “Aw Snap” and a “Reload” button.  Press the “Reload” button, and in most cases, the program will start up where it left off. You may be asked to enter your number-letter code again.
-          When it says 'Resuming ongoing testing session. Please click OK to confirm.' click OK, and the page should reload where you were.
-          If however the “Reload” option is not available,  please e-mail ", shiny::tags$strong("silass@stud.hmtm-hannover.de"), "with a copy to ", shiny::tags$strong("airs@upei.ca"), " and state that Session 2 could  not be completed.  You will be contacted and provided the opportunity to do the test in the research lab space.
-                                      Whether or not you complete the entire set of test, you will receive a credit point for going as far as the program would allow, provided you screenshot and document the error.")),
-
-                     psychTestR::elt_save_results_to_disk(complete = FALSE),
+          #            psychTestR::one_button_page(shiny::tags$p(style = "text-align: left;", "This group of music tests has been recently developed, and the researchers have not been able to test is out on every computer.
+          # It is possible that the program will stop working on your computer.  If this happens you may see “Aw Snap” and a “Reload” button.  Press the “Reload” button, and in most cases, the program will start up where it left off. You may be asked to enter your number-letter code again.
+          # When it says 'Resuming ongoing testing session. Please click OK to confirm.' click OK, and the page should reload where you were.
+          # If however the “Reload” option is not available,  please e-mail ", shiny::tags$strong("silass@stud.hmtm-hannover.de"), "with a copy to ", shiny::tags$strong("airs@upei.ca"), " and state that Session 2 could  not be completed.  You will be contacted and provided the opportunity to do the test in the research lab space.
+          #                             Whether or not you complete the entire set of test, you will receive a credit point for going as far as the program would allow, provided you screenshot and document the error.")),
 
 
                      psychTestR::NAFC_page(label = "computer_type",
                                            prompt = "Which type of computer you are using?",
                                            choices = c("Laptop", "Desktop")),
-
-                     psychTestR::elt_save_results_to_disk(complete = FALSE),
 
 
                      psychTestR::NAFC_page(label = "computer_type2",
@@ -247,13 +180,10 @@ setup_questions <- function() {
                                            choices = c("Mac",
                                                        "PC  (e.g., Dell, Hewlitt Packard, Lenova, Asus… any non-Mac computer).")),
 
-                     psychTestR::elt_save_results_to_disk(complete = FALSE),
-
                      psychTestR::text_input_page(
                        label = "computer_make_model",
                        prompt = "If you know the exact name, and model number of your computer please provide the information."),
 
-                     psychTestR::elt_save_results_to_disk(complete = FALSE),
 
                      psychTestR::NAFC_page(label = "headphone_type",
                                            prompt = "Please identify which kind of headphones you are using",
@@ -292,14 +222,12 @@ return_questions <- function(append = NULL) {
 
 upei_intro <- function(state, append = NULL) {
 
-  print('upei_intro')
-  print(state)
 
   t <- psychTestR::join(
 
     psychTestR::one_button_page(shiny::tags$div(
-      shiny::tags$h1("UPEI 2021 Testing"),
-      shiny::tags$p("This is a protocol for the UPEI 2021 singing study.")
+      shiny::tags$h1("UPEI 2022 Testing"),
+      shiny::tags$p("This is a protocol for the UPEI 2022 singing study.")
     )),
 
     psychTestR::one_button_page(shiny::tags$div(
@@ -423,7 +351,7 @@ upei_test_options <- function(state) {
                              right_margin = 1L,
                              css = system.file('www/css/musicassessr.css', package = "musicassessr")
                            ),
-                           additional_scripts = musicassessr_js(state),
+                           additional_scripts = musicassessr::musicassessr_js(state),
                            languages = c("en"))
 }
 
@@ -636,11 +564,11 @@ MAST_wav <- function(trial_type = c("normal", "daa", "doo"),
                      high_or_low = c("high", "low")) {
 
   if(high_or_low == "high") {
-    file_dir <- 'musicassessr-assets/MAST21_high/'
+    file_dir <- 'MAST21-assets/MAST21_high/'
     files_list <- MAST_high_wavs_ordered
 
   } else {
-    file_dir <- 'musicassessr-assets/MAST21_low/'
+    file_dir <- 'MAST21-assets/MAST21_low/'
     files_list <- MAST_low_wavs_ordered
   }
 
@@ -677,19 +605,19 @@ MAST_wav <- function(trial_type = c("normal", "daa", "doo"),
     x <- paste0(file_dir,  file)
     page_lab <- paste0("MAST21_", high_or_low, "_", which(files_list == file))
 
-    present_stimuli(
+    musicassessr::present_stimuli(
       stimuli = x,
       stimuli_type = "audio",
       display_modality = "auditory",
       page_type = "record_audio_page",
+      get_answer = musicassessr::get_answer_pyin,
       page_text = text,
       hideOnPlay = TRUE,
       auto_next_page = TRUE,
       page_label = page_lab)
   })
 
-  res <- insert.every.other.pos.in.list(res,
-                                        psychTestR::elt_save_results_to_disk(complete = FALSE))
+  res <- musicassessr::insert_item_into_every_other_n_position_in_list(res, psychTestR::elt_save_results_to_disk(complete = FALSE))
 
   psychTestR::module(paste0("MAST21_", high_or_low),
                      res)
@@ -756,7 +684,7 @@ MAST21_wav <- function(state = "production",
                        set_musicassessr_state = FALSE) {
 
   psychTestR::module("MAST21",
-                     psychTestR::new_timeline(psychTestR::join(
+                        psychTestR::join(
 
                        psychTestR::one_button_page(shiny::tags$div(
                          shiny::tags$p("You will now have another test of short singing examples.
@@ -827,8 +755,7 @@ MAST21_wav <- function(state = "production",
                        psychTestR::elt_save_results_to_disk(complete = FALSE),
 
                        musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd4")
-                     ), dict = musicassessr::dict(NULL))
-  )
+                     ))
 }
 
 
@@ -856,3 +783,12 @@ deploy_MAST21_wav <- function(musicassessr_state = 'production') {
     )
   )
 }
+
+
+.onLoad <- function(...) {
+  shiny::addResourcePath(
+    prefix = "MAST21-assets", # custom prefix that will be used to reference your directory
+    directoryPath = system.file("www", package = "MAST21") # path to resource in your package
+  )
+}
+

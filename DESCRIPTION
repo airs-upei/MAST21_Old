@@ -9,3 +9,9 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    musicassessr (>= 0.0.0.9000),
+    psychTestR (>= 2.23.2)
+Remotes:  
+    pmcharrison/psychTestR
+    sebsilas/musicassessr
