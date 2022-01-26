@@ -13,6 +13,6 @@ Imports:
     musicassessr (>= 0.0.0.9000),
     psychTestR (>= 2.23.2)
 Remotes: 
-    pmcharrison/psychTestR
+    pmcharrison/psychTestR,
     sebsilas/musicassessr
 RoxygenNote: 7.1.1
