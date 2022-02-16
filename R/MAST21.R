@@ -125,16 +125,16 @@ UPEI_extra_questions <- function() {
                             choices = c("yes", "no")),
 
       psychTestR::text_input_page(label = "music_theory_7",
-                                  prompt = "If there is any other information you feel is important regarding your knowledge of popular music or any aspect of this questionnaire, please feel free to give a brief description below: ",
+                                  prompt = "If there is any other information that you would be willing to share that might be of interest to the researchers regarding your knowledge of music, or singing, or any aspect of this questionnaire, please feel free to give a brief description below: ",
                                   one_line = FALSE),
 
       psychTestR::NAFC_page(label = "prize_draw",
-                            prompt = "Would you like to enter the draw (1 of 25 chances to win $50)?",
+                            prompt = "Would you like to enter the draw (1 in 25 chance to win a gift card valued at $25)?",
                             choices = c("yes", "no")),
 
-      psychTestR::NAFC_page(label = "bonus_credits",
-                            prompt = "For students currently enrolled in Psychology 1010 Introductory Psychology:  Would you like to receive a bonus point toward your Psychology 1010 grade?",
-                            choices = c("yes", "no")),
+      # psychTestR::NAFC_page(label = "bonus_credits",
+      #                       prompt = "For students currently enrolled in Psychology 1010 Introductory Psychology:  Would you like to receive a bonus point toward your Psychology 1010 grade?",
+      #                       choices = c("yes", "no")),
 
       psychTestR::conditional(test = function(state, answer, ...) {
         psychTestR::answer(state) == "yes" },
@@ -163,11 +163,9 @@ setup_questions <- function() {
                                                                    shiny::tags$li("Close all tabs and windows other than this one."),
                                                                    shiny::tags$li("Quit other apps that are running, and pause any app or file downloads.")))),
 
-          #            psychTestR::one_button_page(shiny::tags$p(style = "text-align: left;", "This group of music tests has been recently developed, and the researchers have not been able to test is out on every computer.
-          # It is possible that the program will stop working on your computer.  If this happens you may see “Aw Snap” and a “Reload” button.  Press the “Reload” button, and in most cases, the program will start up where it left off. You may be asked to enter your number-letter code again.
-          # When it says 'Resuming ongoing testing session. Please click OK to confirm.' click OK, and the page should reload where you were.
-          # If however the “Reload” option is not available,  please e-mail ", shiny::tags$strong("silass@stud.hmtm-hannover.de"), "with a copy to ", shiny::tags$strong("airs@upei.ca"), " and state that Session 2 could  not be completed.  You will be contacted and provided the opportunity to do the test in the research lab space.
-          #                             Whether or not you complete the entire set of test, you will receive a credit point for going as far as the program would allow, provided you screenshot and document the error.")),
+                     psychTestR::one_button_page(shiny::tags$p(style = "text-align: left;", "Please note, it is possible that the program will stop working on your computer.  If this happens you may see “Aw Snap” and a “Reload” button.  Press the “Reload” button, and in most cases, the program will start up where it left off. You may be asked to enter your number-letter code again.
+          When it says 'Resuming ongoing testing session. Please click OK to confirm.' click OK, and the page should reload where you were.
+          If however the “Reload” option is not available,  please e-mail ", shiny::tags$strong("silass@stud.hmtm-hannover.de"), "with a copy to ", shiny::tags$strong("airs@upei.ca"), " and state that session could  not be completed.  You will be contacted and provided the opportunity to do the test in the research lab space.")),
 
 
                      psychTestR::NAFC_page(label = "computer_type",
@@ -226,14 +224,14 @@ upei_intro <- function(state, append = NULL) {
   t <- psychTestR::join(
 
     psychTestR::one_button_page(shiny::tags$div(
-      shiny::tags$h1("UPEI 2022 Testing"),
-      shiny::tags$p("This is a protocol for the UPEI 2022 singing study.")
+      shiny::tags$h1("Welcome to the UPEI 2022 Music Testing"),
+      shiny::tags$p("Vocalization, Music Interests and Music Knowledge Questionnaire")
     )),
 
     psychTestR::one_button_page(shiny::tags$div(
       shiny::tags$p("Please use the latest version of Google Chrome to run these tests.
-                      It can be downloaded", shiny::tags$a("here",
-                                                           href = "https://www.google.com/intl/en_uk/chrome/", target = "_blank"), " and takes a couple of minutes to install."),
+                    If you are not already using it, it can be downloaded", shiny::tags$a("here",
+                                                           href = "https://www.google.com/intl/en_uk/chrome/", target = "_blank"), ". It takes a couple of minutes to install."),
       shiny::tags$p("After downloading and installing, reopen the URL in Chrome and proceed there.")
 
     )),
@@ -614,7 +612,8 @@ MAST_wav <- function(trial_type = c("normal", "daa", "doo"),
       page_text = text,
       hideOnPlay = TRUE,
       auto_next_page = TRUE,
-      page_label = page_lab)
+      page_label = page_lab,
+      volume = 0.75)
   })
 
   res <- musicassessr::insert_item_into_every_other_n_position_in_list(res, psychTestR::elt_save_results_to_disk(complete = FALSE))
@@ -688,9 +687,12 @@ MAST21_wav <- function(state = "production",
 
                        psychTestR::one_button_page(shiny::tags$div(
                          shiny::tags$p("You will now have another test of short singing examples.
-                        There are 2 sets of 21 questions.
-                        The first 20 are very short. Like the previous test, you will hear a melody and be asked to imitate. Unlike the previous test, there is only one chance with each imitation.
-                        You will be asked to sing the two sets of questions on two different syllables /da/ and /du/. ")
+                                        There are 2 sets of 21 questions. The first 20 are very short.
+                                        Like the previous test, you will hear a melody and be asked to imitate.
+                                        Unlike the previous test, in which you sang along with the example, now you will listen and then sing: you will hear the example and then sing the imitation after it.
+                                        You will be asked to sing each of the two sets of 21 examples on a different syllable:  one set on /da/ (“Daah”) and the other on /du/ (“Dooo”).
+                                        The instructions before each set of 21 examples will let you know which syllable to use.
+                                        You will also be asked to sing “Happy birthday” on three occasions. ")
                        )),
 
                        if(include_microphone_calibration_page) musicassessr::microphone_calibration_page(),

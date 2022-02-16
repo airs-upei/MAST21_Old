@@ -26,16 +26,24 @@ deploy_MAST21_2022 <- function(musicassessr_state = "test") {
                                       "The hungry purple dinosaur".  The sentences may sound silly, but together,
                                       they cover all the sounds of the English language. '),
 
-          musicassessr::record_audio_page(page_text = "Please read out loud: The hungry purple dinosaur ate the kind, zingy fox.",
+          musicassessr::record_audio_page(page_text = shiny::tags$div(
+                                                        shiny::tags$p("Please read out loud: "),
+                                                        shiny::tags$p("The hungry purple dinosaur ate the kind, zingy fox.")),
                                           auto_next_page = TRUE),
 
-          musicassessr::record_audio_page(page_text = "Please read out loud: The hungry purple dinosaur ate the jabbering crab.",
+          musicassessr::record_audio_page(page_text = shiny::tags$div(
+                                              shiny::tags$p("Please read out loud: "),
+                                              shiny::tags$p("The hungry purple dinosaur ate the jabbering toy crab.")),
                                           auto_next_page = TRUE),
 
-          musicassessr::record_audio_page(page_text = "Please read out loud: The hungry purple dinosaur ate the mad whale. ",
+          musicassessr::record_audio_page(page_text = shiny::tags$div(
+                                                        shiny::tags$p("Please read out loud: "),
+                                                        shiny::tags$p("The hungry purple dinosaur ate the low mad whale. ")),
                                           auto_next_page = TRUE),
 
-          musicassessr::record_audio_page(page_text = "Please read out loud: The hungry purple dinosaur started vending and quacking.",
+          musicassessr::record_audio_page(page_text = shiny::tags$div(
+                                                        shiny::tags$p("Please read out loud: "),
+                                                        shiny::tags$p(" The hungry purple dinosaur now started vending and quacking.")),
                                           auto_next_page = TRUE),
 
           musicassessr::long_tone_trials(num_items = 6),
