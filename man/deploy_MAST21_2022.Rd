@@ -4,7 +4,11 @@
 \alias{deploy_MAST21_2022}
 \title{Run the MAST21 2022 protocol}
 \usage{
-deploy_MAST21_2022(musicassessr_state = "test")
+deploy_MAST21_2022(
+  musicassessr_state = "test",
+ 
+    dinosaur_instructions = "Please press the “record” button and read the sentence below out loud: "
+)
 }
 \arguments{
 \item{musicassessr_state}{}
