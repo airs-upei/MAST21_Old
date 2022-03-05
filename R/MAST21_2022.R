@@ -26,22 +26,26 @@ deploy_MAST21_2022 <- function(musicassessr_state = "test", dinosaur_instruction
                                       "The hungry purple dinosaur".  The sentences may sound silly, but together,
                                       they cover all the sounds of the English language. '),
 
-          musicassessr::record_audio_page(page_text = shiny::tags$div(
+          musicassessr::record_audio_page(label = "say_pd1",
+                                          page_text = shiny::tags$div(
                                                         shiny::tags$p(dinosaur_instructions),
                                                         shiny::tags$p(shiny::tags$strong("The hungry purple dinosaur ate the kind, zingy fox."))),
                                           auto_next_page = TRUE),
 
-          musicassessr::record_audio_page(page_text = shiny::tags$div(
+          musicassessr::record_audio_page(label = "say_pd2",
+                                          page_text = shiny::tags$div(
                                               shiny::tags$p(dinosaur_instructions),
                                               shiny::tags$p(shiny::tags$strong("The hungry purple dinosaur ate the jabbering toy crab."))),
                                           auto_next_page = TRUE),
 
-          musicassessr::record_audio_page(page_text = shiny::tags$div(
+          musicassessr::record_audio_page(label = "say_pd3",
+                                          page_text = shiny::tags$div(
                                                         shiny::tags$p(dinosaur_instructions),
                                                         shiny::tags$p(shiny::tags$strong("The hungry purple dinosaur ate the low mad whale. "))),
                                           auto_next_page = TRUE),
 
-          musicassessr::record_audio_page(page_text = shiny::tags$div(
+          musicassessr::record_audio_page(label = "say_pd4",
+                                          page_text = shiny::tags$div(
                                                         shiny::tags$p(dinosaur_instructions),
                                                         shiny::tags$p(shiny::tags$strong("The hungry purple dinosaur now started vending and quacking."))),
                                           auto_next_page = TRUE),
@@ -53,6 +57,8 @@ deploy_MAST21_2022 <- function(musicassessr_state = "test", dinosaur_instruction
           psychTestR::elt_save_results_to_disk(complete = FALSE)
 
           ), dict  = musicassessr::dict(NULL)), # end timeline (it's not needed from here onwards, and the SAA is embedded in UPEI_extra_questions, so to avoid nesting)
+
+          psyquest::GMS(),
 
           UPEI_extra_questions(),
 

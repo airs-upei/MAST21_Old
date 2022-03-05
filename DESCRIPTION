@@ -11,8 +11,10 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     musicassessr (>= 0.0.0.9000),
-    psychTestR (>= 2.23.2)
-Remotes: 
+    psychTestR (>= 2.23.2),
+    psyquest (>= 1.3.0)
+Remotes:  
     pmcharrison/psychTestR,
-    sebsilas/musicassessr
+    sebsilas/musicassessr,
+    fmhoeger/psyquest
 RoxygenNote: 7.1.1

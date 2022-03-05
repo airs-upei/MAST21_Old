@@ -1,4 +1,6 @@
 
+#r <- readRDS('output/results/id=11&p_id=joh2329392&save_id=5&pilot=false&complete=false.rds')
+
 setup_questions <- function() {
   psychTestR::module("setup_questions",
 
@@ -104,11 +106,12 @@ upei_intro <- function(state, append = NULL) {
                                                     shiny::tags$a("https://musicog.ca/upei_2022/", href = "https://musicog.ca/upei_2022/", target = "_blank"), "to start again.")))),
 
 
+    return_questions(append),
+
     get_upei_id(),
 
-    psychTestR::elt_save_results_to_disk(complete = FALSE),
+    psychTestR::elt_save_results_to_disk(complete = FALSE)
 
-    return_questions(append)
 
   )
 
@@ -134,7 +137,7 @@ UPEI_extra_questions <- function() {
 
     psychTestR::elt_save_results_to_disk(complete = FALSE),
 
-    psychTestR::one_button_page("Finally, here are several questions about music-theory knowledge."),
+    psychTestR::one_button_page("Finally, here are several questions about your music theory knowledge and your music background and interests."),
 
     psychTestR::elt_save_results_to_disk(complete = FALSE),
 
@@ -166,9 +169,9 @@ UPEI_extra_questions <- function() {
                           prompt = "Would you like to receive the results of Session 2.",
                           choices = c("yes", "no")),
 
-    psyquest::GMS(),
 
-    musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd4"),
+    psychTestR::new_timeline(
+      musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd4"), dict  = musicassessr::dict(NULL)),
 
 
     psychTestR::text_input_page(label = "music_theory_7",
@@ -315,8 +318,8 @@ MAST_wav <- function(trial_type = c("normal", "daa", "doo"),
 
 
 
-MAST21_wav_block_daa <- function() {
-  psychTestR::module("MAST21_daa",
+MAST21_wav_block_daa <- function(label = "MAST21_daa") {
+  psychTestR::module(label,
 
                      psychTestR::join(
 
@@ -341,8 +344,8 @@ MAST21_wav_block_daa <- function() {
 
 
 
-MAST21_wav_block_doo <- function() {
-  psychTestR::module("MAST21_doo",
+MAST21_wav_block_doo <- function(label = "MAST21_doo") {
+  psychTestR::module(label,
 
                      psychTestR::join(
 
@@ -380,7 +383,7 @@ MAST21_wav <- function(state = "production",
                                         Unlike the previous test, in which you sang along with the example, now you will listen and then sing: you will hear the example and then sing the imitation after it.
                                         You will be asked to sing each of the two sets of 21 examples on a different syllable:  one set on /da/ (“Daah”) and the other on /du/ (“Dooo”).
                                         The instructions before each set of 21 examples will let you know which syllable to use.
-                                        You will also be asked to sing “Happy birthday” on three occasions. ")
+                                        You will also be asked to sing “Happy birthday” on four occasions. ")
                        )),
 
                        if(include_microphone_calibration_page) musicassessr::microphone_calibration_page(),
@@ -405,7 +408,7 @@ MAST21_wav <- function(state = "production",
                        }, logic = psychTestR::join (
                          psychTestR::one_button_page("In the following trials, you will sing back melodies. Please sing with a \"Daah\" sound."),
 
-                         MAST21_wav_block_daa(),
+                         MAST21_wav_block_daa(label = "MAST21_wav_daa_"),
 
                          psychTestR::elt_save_results_to_disk(complete = FALSE),
 
@@ -418,7 +421,9 @@ MAST21_wav <- function(state = "production",
                          psychTestR::one_button_page(shiny::tags$div(
                            shiny::tags$p("In the following trials, you will sing back melodies. Please sing with a \"Dooo\" sound."))),
 
-                         MAST21_wav_block_doo()
+                         MAST21_wav_block_doo(label = "MAST21_wav_doo_"),
+
+                         musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd3")
 
                        )),
 
@@ -427,18 +432,20 @@ MAST21_wav <- function(state = "production",
                        }, logic = psychTestR::join(
                          psychTestR::one_button_page("In the following trials, you will sing back melodies. Please sing with a \"Dooo\" sound."),
 
-                         MAST21_wav_block_doo(),
+                         MAST21_wav_block_doo(label = "MAST21_wav_doo_"),
 
                          psychTestR::elt_save_results_to_disk(complete = FALSE),
 
-                         musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd3"),
+                         musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd2"),
 
                          psychTestR::elt_save_results_to_disk(complete = FALSE),
 
 
                          psychTestR::one_button_page("In the following trials, you will sing back melodies. Please sing with a \"Daah\" sound."),
 
-                         MAST21_wav_block_daa()
+                         MAST21_wav_block_daa(label = "MAST21_wav_daa_"),
+
+                         musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd3")
 
                        )),
 
@@ -468,7 +475,7 @@ deploy_MAST21_wav <- function(musicassessr_state = 'production') {
     opt = psychTestR::test_options(
       title = "MAST .wav test",
       admin_password = "demo",
-      additional_scripts = musicassessr_js(musicassessr_state)
+      additional_scripts = musicassessr::musicassessr_js(musicassessr_state)
     )
   )
 }

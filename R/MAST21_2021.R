@@ -147,6 +147,8 @@ UPEI_2021_battery <- function(state = "production") {
 
       psyquest::GMS(),
 
+      psychTestR::one_button_page('test'),
+
       psychTestR::elt_save_results_to_disk(complete = FALSE),
 
       psychTestR::one_button_page(shiny::tags$div(
