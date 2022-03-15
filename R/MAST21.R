@@ -1,5 +1,4 @@
 
-#r <- readRDS('output/results/id=11&p_id=joh2329392&save_id=5&pilot=false&complete=false.rds')
 
 setup_questions <- function() {
   psychTestR::module("setup_questions",
@@ -7,7 +6,8 @@ setup_questions <- function() {
                      psychTestR::NAFC_page(label = "chrome",
                                            choices = c(psychTestR::i18n("Yes"), psychTestR::i18n("No")),
                                            prompt = "Are you running this page in the latest version of Google Chrome?",
-                                           on_complete = musicassessr::have_requirements),
+                                           on_complete = musicassessr::have_requirements,
+                                           save_answer = FALSE),
 
                      psychTestR::one_button_page(shiny::tags$div(shiny::tags$p("For best results please: "),
                                                                  shiny::tags$ul(
@@ -95,7 +95,8 @@ upei_intro <- function(state, append = NULL) {
 
     psychTestR::NAFC_page(label = "using_chrome",
                           prompt = "Are you using the most recent version of Google Chrome?",
-                          choices = c("Yes", "No")),
+                          choices = c("Yes", "No"),
+                          save_answer = FALSE),
 
     psychTestR::conditional(test = function(state, answer, ...) {
       psychTestR::answer(state) == "No"
@@ -168,10 +169,6 @@ UPEI_extra_questions <- function() {
     psychTestR::NAFC_page(label = "music_theory_6",
                           prompt = "Would you like to receive the results of Session 2.",
                           choices = c("yes", "no")),
-
-
-    psychTestR::new_timeline(
-      musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd4"), dict  = musicassessr::dict(NULL)),
 
 
     psychTestR::text_input_page(label = "music_theory_7",
@@ -248,10 +245,40 @@ MAST_high_wavs_ordered <- c("1_F_high.wav",
                             "20_BJ4_high.wav",
                             "21_BJfull_high.wav")
 
+choose_MAST21_text <- function(file, trial_type) {
 
-MAST_wav <- function(trial_type = c("normal", "daa", "doo"),
-                     high_or_low = c("high", "low")) {
+  text_note_daa <- "Please sing back the note with a 'Daa' sound then click 'Stop'."
+  text_melody_daa <- "Please sing back the melody with a 'Daa' sound then click 'Stop'."
+  text_note_doo <- "Please sing back the note with a 'Doo' sound then click 'Stop'."
+  text_melody_doo <- "Please sing back the melody with a 'Doo' sound then click 'Stop'."
+  text_note <- "Please sing back the note then click 'Stop'."
+  text_melody <- "Please sing back the melody then click 'Stop'."
 
+  if(startsWith(file, "1_") | startsWith(file, "2_") |
+     startsWith(file, "3_") | startsWith(file, "4_")) {
+
+    if(trial_type == "daa") {
+      text <- text_note_daa
+    } else if(trial_type == "doo") {
+      text <- text_note_doo
+    } else {
+      text <- text_note
+    }
+
+  } else {
+    if(trial_type == "daa") {
+      text <- text_melody_daa
+    } else if(trial_type == "doo") {
+      text <- text_melody_doo
+    } else {
+      text <- text_melody
+    }
+  }
+  text
+}
+
+
+get_MAST_files <- function(high_or_low) {
   if(high_or_low == "high") {
     file_dir <- 'MAST21-assets/MAST21_high/'
     files_list <- MAST_high_wavs_ordered
@@ -260,40 +287,23 @@ MAST_wav <- function(trial_type = c("normal", "daa", "doo"),
     file_dir <- 'MAST21-assets/MAST21_low/'
     files_list <- MAST_low_wavs_ordered
   }
+  list(file_dir, files_list)
+}
 
-  text_note_daa <- "Please sing back the note with a 'Daa' sound then click 'Stop'."
-  text_melody_daa <- "Please sing back the melody with a 'Daa' sound then click 'Stop'."
-  text_note_doo <- "Please sing back the note with a 'Doo' sound then click 'Stop'."
-  text_melody_doo <- "Please sing back melody note with a 'Doo' sound then click 'Stop'."
-  text_note <- "Please sing back the note then click 'Stop'."
-  text_melody <- "Please sing back the melody then click 'Stop'."
 
-  res <- lapply(files_list, function(file) {
+MAST_wav <- function(trial_type = c("normal", "daa", "doo"),
+                     high_or_low = c("high", "low")) {
 
-    if(startsWith(file, "1_") | startsWith(file, "2_") |
-       startsWith(file, "3_") | startsWith(file, "4_")) {
+  file_dir <- get_MAST_files(high_or_low)[[1]]
+  files_list <- get_MAST_files(high_or_low)[[2]]
 
-      if(trial_type == "daa") {
-        text <- text_note_daa
-      } else if(trial_type == "doo") {
-        text <- text_note_doo
-      } else {
-        text <- text_note
-      }
+  res <- purrr::map(files_list, function(file) {
 
-    } else {
-      if(trial_type == "daa") {
-        text <- text_melody_daa
-      } else if(trial_type == "doo") {
-        text <- text_melody_doo
-      } else {
-        text <- text_melody
-      }
-    }
+    text <- choose_MAST21_text(file, trial_type)
 
     x <- paste0(file_dir,  file)
-    page_lab <- paste0("MAST21_", high_or_low, "_", which(files_list == file))
-
+    page_lab <- paste0("MAST21_", high_or_low, "_", trial_type, "_", which(files_list == file))
+    #page_lab <- paste0(sample(1:9, 10, replace = T), collapse = "")
     musicassessr::present_stimuli(
       stimuli = x,
       stimuli_type = "audio",
@@ -308,151 +318,13 @@ MAST_wav <- function(trial_type = c("normal", "daa", "doo"),
   })
 
   res <- musicassessr::insert_item_into_every_other_n_position_in_list(res, psychTestR::elt_save_results_to_disk(complete = FALSE))
-
-  psychTestR::module(paste0("MAST21_", high_or_low),
-                     res)
+  res
 
 }
 
 
 
 
-
-MAST21_wav_block_daa <- function(label = "MAST21_daa") {
-  psychTestR::module(label,
-
-                     psychTestR::join(
-
-                       psychTestR::conditional(
-                         test = function(state, ...) {
-                           range <- psychTestR::get_global("range", state)
-                           range %in% c("Baritone", "Bass", "Tenor")
-                         },
-                         logic = MAST_wav(trial_type = "daa", high_or_low = "low")
-                       ),
-
-                       psychTestR::conditional(
-                         test = function(state, ...) {
-                           range <- psychTestR::get_global("range", state)
-                           range %in% c("Alto", "Soprano")
-                         },
-                         logic = MAST_wav(trial_type = "daa", high_or_low = "high")
-                       )
-                     ))
-}
-
-
-
-
-MAST21_wav_block_doo <- function(label = "MAST21_doo") {
-  psychTestR::module(label,
-
-                     psychTestR::join(
-
-                       psychTestR::conditional(
-                         test = function(state, ...) {
-                           range <- psychTestR::get_global("range", state)
-                           range %in% c("Baritone", "Bass", "Tenor")
-                         },
-                         logic = MAST_wav(trial_type = "doo", high_or_low = "low")
-                       ),
-
-                       psychTestR::conditional(
-                         test = function(state, ...) {
-                           range <- psychTestR::get_global("range", state)
-                           range %in% c("Alto", "Soprano")
-                         },
-                         logic = MAST_wav(trial_type = "doo", high_or_low = "high")
-                       )
-                     ))
-}
-
-
-
-MAST21_wav <- function(state = "production",
-                       include_microphone_calibration_page = FALSE,
-                       set_musicassessr_state = FALSE) {
-
-  psychTestR::module("MAST21",
-                        psychTestR::join(
-
-                       psychTestR::one_button_page(shiny::tags$div(
-                         shiny::tags$p("You will now have another test of short singing examples.
-                                        There are 2 sets of 21 questions. The first 20 are very short.
-                                        Like the previous test, you will hear a melody and be asked to imitate.
-                                        Unlike the previous test, in which you sang along with the example, now you will listen and then sing: you will hear the example and then sing the imitation after it.
-                                        You will be asked to sing each of the two sets of 21 examples on a different syllable:  one set on /da/ (“Daah”) and the other on /du/ (“Dooo”).
-                                        The instructions before each set of 21 examples will let you know which syllable to use.
-                                        You will also be asked to sing “Happy birthday” on four occasions. ")
-                       )),
-
-                       if(include_microphone_calibration_page) musicassessr::microphone_calibration_page(),
-
-                       musicassessr::get_voice_range_page(with_examples = FALSE),
-
-                       psychTestR::elt_save_results_to_disk(complete = FALSE),
-
-
-                       psychTestR::code_block(function(state, ...) {
-                         snap <- sample(1:2, 1)
-                         psychTestR::set_global("snap", snap, state)
-                       }),
-
-                       musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd1"),
-
-                       psychTestR::elt_save_results_to_disk(complete = FALSE),
-
-
-                       psychTestR::conditional(test = function(state, ...) {
-                         psychTestR::get_global("snap", state) == 1
-                       }, logic = psychTestR::join (
-                         psychTestR::one_button_page("In the following trials, you will sing back melodies. Please sing with a \"Daah\" sound."),
-
-                         MAST21_wav_block_daa(label = "MAST21_wav_daa_"),
-
-                         psychTestR::elt_save_results_to_disk(complete = FALSE),
-
-
-                         musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd2"),
-
-                         psychTestR::elt_save_results_to_disk(complete = FALSE),
-
-
-                         psychTestR::one_button_page(shiny::tags$div(
-                           shiny::tags$p("In the following trials, you will sing back melodies. Please sing with a \"Dooo\" sound."))),
-
-                         MAST21_wav_block_doo(label = "MAST21_wav_doo_"),
-
-                         musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd3")
-
-                       )),
-
-                       psychTestR::conditional(test = function(state, ...) {
-                         psychTestR::get_global("snap", state) == 2
-                       }, logic = psychTestR::join(
-                         psychTestR::one_button_page("In the following trials, you will sing back melodies. Please sing with a \"Dooo\" sound."),
-
-                         MAST21_wav_block_doo(label = "MAST21_wav_doo_"),
-
-                         psychTestR::elt_save_results_to_disk(complete = FALSE),
-
-                         musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd2"),
-
-                         psychTestR::elt_save_results_to_disk(complete = FALSE),
-
-
-                         psychTestR::one_button_page("In the following trials, you will sing back melodies. Please sing with a \"Daah\" sound."),
-
-                         MAST21_wav_block_daa(label = "MAST21_wav_daa_"),
-
-                         musicassessr::sing_happy_birthday_page(feedback = FALSE, label = "sing_hbd3")
-
-                       )),
-
-                       psychTestR::elt_save_results_to_disk(complete = FALSE)
-
-                     ))
-}
 
 
 
@@ -487,4 +359,47 @@ deploy_MAST21_wav <- function(musicassessr_state = 'production') {
     directoryPath = system.file("www", package = "MAST21") # path to resource in your package
   )
 }
+
+
+get_dob_page <- function(text = "When is your date of birth?") {
+  psychTestR::page(
+    label = "dob",
+    ui = shiny::tags$div(
+      shiny::tags$p(text),
+      shiny::selectInput(inputId = "day", label = "Day", choices = as.character(1:31), width = "40%"),
+      shiny::selectInput(inputId = "month", label = "Month", choices = month.name, width = "40%"),
+      shiny::selectInput(inputId = "year", label = "Year", choices = as.character(1900:2021), width = "40%"),
+      psychTestR::trigger_button("next", "Next")
+    ),
+    get_answer = function(input, ...) {
+      list(day = input$day,
+           month = input$month,
+           year = input$year)
+    })
+}
+
+
+upei_test_options <- function(state) {
+  psychTestR::test_options(title = "UPEI",
+                           admin_password = "@irs@irs2021#",
+                           enable_admin_panel = FALSE,
+                           display = psychTestR::display_options(
+                             left_margin = 1L,
+                             right_margin = 1L,
+                             css = system.file('www/css/musicassessr.css', package = "musicassessr")
+                           ),
+                           additional_scripts = musicassessr::musicassessr_js(state),
+                           languages = c("en"))
+}
+
+
+return_questions <- function(append = NULL) {
+
+  if(is.null(append)) {
+    setup_questions()
+  } else {
+    psychTestR::code_block(function(state, ...) { })
+  }
+}
+
 
