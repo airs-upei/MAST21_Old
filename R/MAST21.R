@@ -3,11 +3,11 @@
 setup_questions <- function() {
   psychTestR::module("setup_questions",
 
-                     psychTestR::NAFC_page(label = "chrome",
-                                           choices = c(psychTestR::i18n("Yes"), psychTestR::i18n("No")),
-                                           prompt = "Are you running this page in the latest version of Google Chrome?",
-                                           on_complete = musicassessr::have_requirements,
-                                           save_answer = FALSE),
+                     # psychTestR::NAFC_page(label = "chrome",
+                     #                       choices = c(psychTestR::i18n("Yes"), psychTestR::i18n("No")),
+                     #                       prompt = "Are you running this page in the latest version of Google Chrome?",
+                     #                       on_complete = musicassessr::have_requirements,
+                     #                       save_answer = FALSE),
 
                      psychTestR::one_button_page(shiny::tags$div(shiny::tags$p("For best results please: "),
                                                                  shiny::tags$ul(
