@@ -3,12 +3,6 @@
 setup_questions <- function() {
   psychTestR::module("setup_questions",
 
-                     # psychTestR::NAFC_page(label = "chrome",
-                     #                       choices = c(psychTestR::i18n("Yes"), psychTestR::i18n("No")),
-                     #                       prompt = "Are you running this page in the latest version of Google Chrome?",
-                     #                       on_complete = musicassessr::have_requirements,
-                     #                       save_answer = FALSE),
-
                      psychTestR::one_button_page(shiny::tags$div(shiny::tags$p("For best results please: "),
                                                                  shiny::tags$ul(
                                                                    shiny::tags$li("Close all tabs and windows other than this one."),
@@ -63,14 +57,15 @@ get_upei_id <- function() {
         shiny::tags$br(),
         shiny::tags$p("For example: joh11tav")))),
 
+
     psychTestR::reactive_page(function(state, ...) {
       p_id <- psychTestR::answer(state)
       psychTestR::set_global("p_id", p_id, state)
-
       psychTestR::one_button_page(shiny::tags$div(
         shiny::tags$script(paste0('const p_id = \"', p_id, '\";')),
         shiny::tags$p(paste0("Thank you, ", p_id))))
     })
+
   )
 
 }
@@ -84,14 +79,6 @@ upei_intro <- function(state, append = NULL) {
       shiny::tags$h1("Welcome to the UPEI 2022 Music Testing"),
       shiny::tags$p("Vocalization, Music Interests and Music Knowledge Questionnaire")
     )),
-
-    # psychTestR::one_button_page(shiny::tags$div(
-    #   shiny::tags$p("Please use the latest version of Google Chrome to run these tests.
-    #                 If you are not already using it, it can be downloaded", shiny::tags$a("here",
-    #                                                        href = "https://www.google.com/intl/en_uk/chrome/", target = "_blank"), ". It takes a couple of minutes to install."),
-    #   shiny::tags$p("After downloading and installing, reopen the URL in Chrome and proceed there.")
-    #
-    # )),
 
     psychTestR::NAFC_page(label = "using_chrome",
                           prompt = "Are you using the most recent version of Google Chrome?",

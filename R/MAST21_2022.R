@@ -194,8 +194,12 @@ deploy_MAST21_2022 <- function(musicassessr_state = "test", dinosaur_instruction
 
           psychTestR::elt_save_results_to_disk(complete = TRUE),
 
-          psychTestR::final_page(shiny::tags$div(shiny::tags$p("Please click on the following link to go to the final test of this session: ", shiny::tags$a(" click here",
-                                                       href = "https://www.google.com/intl/en_uk/chrome/", target = "_blank"), ".")))
+          psychTestR::reactive_page(function(state, ... ) {
+            p_id <- psychTestR::get_global('p_id', state)
+            url <- paste0('https://upeiairs.qualtrics.com/jfe/form/SV_5vDAjJhxLqZw7Km?participant=', p_id)
+            psychTestR::final_page(shiny::tags$div(shiny::tags$p("Please click on the following link to go to the final test of this session: ",
+                                  shiny::tags$a(" click here", href = url, target = "_blank"), ".")))
+          })
 
           ),
     opt = upei_test_options(musicassessr_state)
