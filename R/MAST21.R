@@ -117,7 +117,7 @@ upei_intro <- function(state, append = NULL) {
   }
 }
 
-UPEI_extra_questions <- function() {
+UPEI_extra_questions <- function(with_compensation_question = TRUE) {
 
   psychTestR::module(label = "additional_questions", psychTestR::join(
 
@@ -162,9 +162,7 @@ UPEI_extra_questions <- function() {
                                 prompt = "If there is any other information that you would be willing to share that might be of interest to the researchers regarding your knowledge of music, or singing, or any aspect of this questionnaire, please feel free to give a brief description below: ",
                                 one_line = FALSE),
 
-    psychTestR::NAFC_page(label = "prize_draw",
-                          prompt = "Would you like to enter the draw (1 in 25 chance to win a gift card valued at $25)?",
-                          choices = c("yes", "no"))
+    if(with_compensation_question) psychTestR::NAFC_page(label = "prize_draw", prompt = "Would you like to enter the draw (1 in 25 chance to win a gift card valued at $25)?", choices = c("yes", "no"))
 
     # psychTestR::NAFC_page(label = "bonus_credits",
     #                       prompt = "For students currently enrolled in Psychology 1010 Introductory Psychology:  Would you like to receive a bonus point toward your Psychology 1010 grade?",
