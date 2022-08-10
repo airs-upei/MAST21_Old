@@ -7,11 +7,13 @@
 deploy_MAST21_2022(
   musicassessr_state = "test",
  
-    dinosaur_instructions = "Please press the “record” button and read the sentence below out loud: "
+    dinosaur_instructions = "Please press the “record” button and read the sentence below out loud: ",
+ 
+    final_qualtrics_url = "https://upeiairs.qualtrics.com/jfe/form/SV_5vDAjJhxLqZw7Km?participant="
 )
 }
 \arguments{
-\item{musicassessr_state}{}
+\item{final_qualtrics_url}{}
 }
 \value{
 

@@ -92,15 +92,20 @@ condition_two <- function() {
 }
 
 
+
 #' Run the MAST21 2022 protocol
 #'
 #' @param musicassessr_state
+#' @param dinosaur_instructions
+#' @param final_qualtrics_url
 #'
 #' @return
 #' @export
 #'
 #' @examples
-deploy_MAST21_2022 <- function(musicassessr_state = "test", dinosaur_instructions = "Please press the “record” button and read the sentence below out loud: ") {
+deploy_MAST21_2022 <- function(musicassessr_state = "test",
+                               dinosaur_instructions = "Please press the “record” button and read the sentence below out loud: ",
+                               final_qualtrics_url = 'https://upeiairs.qualtrics.com/jfe/form/SV_5vDAjJhxLqZw7Km?participant=') {
 
   psychTestR::make_test(
     psychTestR::join(
@@ -196,7 +201,7 @@ deploy_MAST21_2022 <- function(musicassessr_state = "test", dinosaur_instruction
 
           psychTestR::reactive_page(function(state, ... ) {
             p_id <- psychTestR::get_global('p_id', state)
-            url <- paste0('https://upeiairs.qualtrics.com/jfe/form/SV_5vDAjJhxLqZw7Km?participant=', p_id)
+            url <- paste0(final_qualtrics_url, p_id)
             psychTestR::final_page(shiny::tags$div(shiny::tags$p("Please click on the following link to go to the final test of this session: ",
                                   shiny::tags$a(" click here", href = url, target = "_blank"), ".")))
           })
