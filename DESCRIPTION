@@ -1,4 +1,4 @@
-Package: MAST21
+Package: MAST21Old
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
@@ -17,6 +17,6 @@ Imports:
     psyquest (>= 1.3.0)
 Remotes: 
     pmcharrison/psychTestR,
-    sebsilas/musicassessr,
+    sebsilas/musicassessr@8b93eedb8ac2b251dad29b436588d8ca138a52e7,
     fmhoeger/psyquest
 RoxygenNote: 7.1.1
