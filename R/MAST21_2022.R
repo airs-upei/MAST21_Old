@@ -184,7 +184,6 @@ after_setup <- function(page_type = "record_midi_page",
 #' @param language
 #' @param final_qualtrics_url
 #' @param data_collection_method
-
 #'
 #' @return
 #' @export
