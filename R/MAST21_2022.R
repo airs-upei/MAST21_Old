@@ -215,16 +215,16 @@ deploy_MAST21_Old_2024 <- function(
             musicassessr::setup_pages(input = "microphone", absolute_url = absolute_url),
 
 
-            say_pd(dinosaur_instructions = "Please press the “record” button and read the sentence below out loud: ",
-                   body_instructions = 'Although the next short test involves singing,
-                                      we would like to start off by asking you to read out loud four short sentences all beginning with the phrase
-                                      "The hungry purple dinosaur".  The sentences may sound silly, but together,
-                                      they cover all the sounds of the English language.'),
-
-            psychTestR::elt_save_results_to_disk(complete = FALSE),
-
-
-            musicassessr::long_tone_trials(num_items = 6)
+            # say_pd(dinosaur_instructions = "Please press the “record” button and read the sentence below out loud: ",
+            #        body_instructions = 'Although the next short test involves singing,
+            #                           we would like to start off by asking you to read out loud four short sentences all beginning with the phrase
+            #                           "The hungry purple dinosaur".  The sentences may sound silly, but together,
+            #                           they cover all the sounds of the English language.'),
+            #
+            # psychTestR::elt_save_results_to_disk(complete = FALSE),
+            #
+            #
+            # musicassessr::long_tone_trials(num_items = 6)
 
           ),
 
